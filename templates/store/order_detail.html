@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Comprobante de solicitud{% endblock %}
+{% block content %}
+<section class="container section-space narrow-page">
+  <div class="receipt-card">
+    <span class="eyebrow">LUDIX / SOLICITUD SIMULADA</span>
+    <div class="receipt-check">✓</div>
+    <h1>¡Todo listo!</h1>
+    <p class="text-white-50">Tu solicitud quedó registrada. No se realizó ningún pago.</p>
+    <div class="receipt-meta"><span>Comprobante</span><code>{{ order.code }}</code><span>Fecha</span><span>{{ order.created_at|date:"d/m/Y H:i" }}</span></div>
+    <div class="receipt-items">
+      {% for item in order.items.all %}
+        <div class="summary-line"><span>{{ item.title_snapshot }} × {{ item.quantity }}</span><span>CLP ${{ item.line_total|floatformat:"0" }}</span></div>
+      {% endfor %}
+    </div>
+    <div class="summary-total"><span>Total</span><span>CLP ${{ order.total|floatformat:"0" }}</span></div>
+    <div class="d-flex flex-wrap gap-2 mt-4"><a class="btn btn-lime" href="{% url 'catalog' %}">Seguir explorando</a><a class="btn btn-outline-light" href="{% url 'order_history' %}">Ver mis solicitudes</a></div>
+  </div>
+</section>
+{% endblock %}

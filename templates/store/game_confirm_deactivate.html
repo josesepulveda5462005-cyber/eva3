@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Desactivar {{ game.title }}{% endblock %}
+{% block content %}
+<section class="container section-space narrow-page">
+  <div class="form-panel">
+    <span class="eyebrow">BAJA LÓGICA</span><h1>¿Desactivar este juego?</h1>
+    <p><strong>{{ game.title }}</strong> dejará de mostrarse en el catálogo. El registro y el historial de solicitudes se conservarán.</p>
+    <form method="post">
+      {% csrf_token %}
+      <div class="d-flex gap-2 mt-4"><button class="btn btn-danger btn-lg" type="submit">Sí, desactivar</button><a class="btn btn-outline-light btn-lg" href="{% url 'management_games' %}">Cancelar</a></div>
+    </form>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Crear cuenta{% endblock %}
+{% block content %}
+<section class="container section-space narrow-page">
+  <div class="form-panel">
+    <span class="eyebrow">ÚNETE A LA COMUNIDAD</span><h1>Crea tu cuenta<span class="brand-dot">.</span></h1>
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+      {% for field in form %}
+        <div class="mb-3"><label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% if field.help_text %}<div class="form-text">{{ field.help_text|safe }}</div>{% endif %}{% for error in field.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}</div>
+      {% endfor %}
+      <button class="btn btn-lime btn-lg w-100 mt-2" type="submit">Crear cuenta</button>
+    </form>
+    <p class="form-footnote">¿Ya tienes una cuenta? <a href="{% url 'login' %}">Ingresa</a></p>
+  </div>
+</section>
+{% endblock %}

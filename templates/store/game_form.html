@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block content %}
+<section class="container section-space form-page">
+  <a class="back-link" href="{% url 'management_games' %}">← Volver a gestión</a>
+  <div class="form-panel mt-3">
+    <span class="eyebrow">BACKOFFICE / CATÁLOGO</span><h1>{{ page_title }}<span class="brand-dot">.</span></h1>
+    <form method="post" enctype="multipart/form-data" novalidate>
+      {% csrf_token %}
+      {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+      {% for field in form %}
+        <div class="mb-3">
+          <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+          {% for error in field.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+        </div>
+      {% endfor %}
+      <div class="d-flex flex-wrap gap-2 mt-4"><button class="btn btn-lime btn-lg" type="submit">Guardar videojuego</button><a class="btn btn-outline-light btn-lg" href="{% url 'management_games' %}">Cancelar</a></div>
+    </form>
+  </div>
+</section>
+{% endblock %}

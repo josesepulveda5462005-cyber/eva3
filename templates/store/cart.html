@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load static %}
+{% load game_media %}
+{% block title %}Tu carrito{% endblock %}
+{% block content %}
+<section class="container section-space">
+  <div class="section-heading"><div><span class="eyebrow">TU SELECCIÓN</span><h1>Carrito<span class="brand-dot">.</span></h1></div></div>
+  {% if lines %}
+    <div class="row g-4 align-items-start">
+      <div class="col-12 col-lg-8">
+        <div class="cart-list">
+          {% for line in lines %}
+            <article class="cart-row">
+              {% game_cover_url line.game as cover_url %}
+              <a class="cart-thumb game-cover--{{ line.game.slug }}" href="{% url 'game_detail' line.game.slug %}">
+                {% if cover_url %}<img src="{{ cover_url }}" alt="Portada de {{ line.game.title }}" loading="lazy" decoding="async">{% else %}<span aria-hidden="true">{{ line.game.title|slice:":1" }}</span>{% endif %}
+              </a>
+              <div class="cart-game"><span class="game-category">{{ line.game.genre.name }} · {{ line.game.platform }}</span><a href="{% url 'game_detail' line.game.slug %}">{{ line.game.title }}</a><span class="fine-print">{% if line.available %}Disponible{% else %}Stock insuficiente o no disponible{% endif %}</span></div>
+              <form class="cart-quantity-form" method="post" action="{% url 'cart_update' line.game.pk %}">
+                {% csrf_token %}
+                <label class="visually-hidden" for="quantity-{{ line.game.pk }}">Cantidad de {{ line.game.title }}</label>
+                <input id="quantity-{{ line.game.pk }}" type="number" name="quantity" min="1" max="{{ line.game.stock }}" value="{{ line.quantity }}" class="form-control" required>
+                <button class="btn btn-sm btn-outline-light" type="submit">Actualizar</button>
+              </form>
+              <div class="cart-line-price">CLP ${{ line.line_total|floatformat:"0" }}</div>
+              <form method="post" action="{% url 'cart_remove' line.game.pk %}">
+                {% csrf_token %}
+                <button class="icon-button" type="submit" aria-label="Quitar {{ line.game.title }}">×</button>
+              </form>
+            </article>
+          {% endfor %}
+        </div>
+        <form method="post" action="{% url 'cart_clear' %}" class="mt-3">
+          {% csrf_token %}<button class="text-button" type="submit">Vaciar carrito</button>
+        </form>
+      </div>
+      <div class="col-12 col-lg-4">
+        <aside class="summary-card">
+          <span class="eyebrow">RESUMEN</span>
+          <div class="summary-line"><span>Subtotal</span><span>CLP ${{ total|floatformat:"0" }}</span></div>
+          <div class="summary-line"><span>Impuestos</span><span>Incluidos</span></div>
+          <hr>
+          <div class="summary-total"><span>Total</span><span>CLP ${{ total|floatformat:"0" }}</span></div>
+          {% if user.is_authenticated %}
+            <form method="post" action="{% url 'checkout' %}" class="mt-4">
+              {% csrf_token %}
+              <button class="btn btn-lime btn-lg w-100" type="submit" {% if not can_checkout %}disabled{% endif %}>Confirmar solicitud</button>
+            </form>
+          {% else %}
+            <a class="btn btn-lime btn-lg w-100 mt-4" href="{% url 'login' %}?next={{ request.path }}">Ingresar para continuar</a>
+          {% endif %}
+          <p class="fine-print mt-3 mb-0">No se procesa un pago real. Se generará un comprobante de demostración.</p>
+        </aside>
+      </div>
+    </div>
+  {% else %}
+    <div class="empty-state"><span class="empty-icon">＋</span><h2>Tu carrito está esperando una aventura</h2><p>Explora el catálogo y agrega tus videojuegos favoritos.</p><a class="btn btn-lime" href="{% url 'catalog' %}">Explorar juegos</a></div>
+  {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+{% load game_media %}
+{% block title %}{{ game.title }}{% endblock %}
+{% block content %}
+<section class="container section-space detail-wrap">
+  <a class="back-link" href="{% url 'catalog' %}">← Volver al catálogo</a>
+  <div class="row g-5 align-items-center mt-1">
+    <div class="col-12 col-lg-6">
+      {% game_cover_url game as cover_url %}
+      <div class="detail-cover game-cover--{{ game.slug }}{% if cover_url %} cover-has-image{% endif %}">
+        {% if cover_url %}
+          <img class="cover-art" src="{{ cover_url }}" alt="Portada de {{ game.title }}" decoding="async">
+        {% else %}
+          <span class="cover-orbit"></span><span class="cover-code">{{ game.genre.name|upper }} / LUDIX</span><span class="cover-title">{{ game.title }}</span><span class="cover-platform">{{ game.platform }}</span>
+        {% endif %}
+      </div>
+    </div>
+    <div class="col-12 col-lg-6 detail-copy">
+      <span class="eyebrow">{{ game.genre.name }} · {{ game.platform }}</span>
+      <h1>{{ game.title }}</h1>
+      <p class="detail-description">{{ game.description }}</p>
+      <div class="detail-stock">{% if game.is_purchasable %}<span class="availability-dot is-available"></span> Disponible · {{ game.stock }} unidades{% else %}<span class="availability-dot"></span> No disponible{% endif %}</div>
+      <div class="detail-price">CLP ${{ game.price|floatformat:"0" }}</div>
+      {% if game.is_purchasable %}
+        <form method="post" action="{% url 'cart_add' game.pk %}" class="add-cart-form">
+          {% csrf_token %}
+          <label for="quantity" class="form-label">Cantidad</label>
+          <div class="d-flex gap-2">
+            <input id="quantity" class="form-control quantity-input" type="number" name="quantity" min="1" max="{{ game.stock }}" value="1" required>
+            <button class="btn btn-lime btn-lg flex-grow-1" type="submit">Agregar al carrito <span aria-hidden="true">↗</span></button>
+          </div>
+        </form>
+      {% else %}
+        <button class="btn btn-outline-secondary btn-lg" type="button" disabled>No disponible por ahora</button>
+      {% endif %}
+      <p class="fine-print">Compra de demostración. No se realizará ningún cobro real.</p>
+    </div>
+  </div>
+</section>
+{% endblock %}

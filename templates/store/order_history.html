@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Mis solicitudes{% endblock %}
+{% block content %}
+<section class="container section-space">
+  <div class="section-heading"><div><span class="eyebrow">TU CUENTA</span><h1>Mis solicitudes<span class="brand-dot">.</span></h1></div></div>
+  <div class="table-responsive admin-table-wrap">
+    <table class="table admin-table align-middle">
+      <thead><tr><th>Comprobante</th><th>Fecha</th><th>Estado</th><th>Total</th><th></th></tr></thead>
+      <tbody>
+      {% for order in orders %}
+        <tr><td><code>{{ order.code }}</code></td><td>{{ order.created_at|date:"d/m/Y H:i" }}</td><td>{{ order.get_status_display }}</td><td>CLP ${{ order.total|floatformat:"0" }}</td><td class="text-end"><a class="btn btn-sm btn-outline-light" href="{% url 'order_detail' order.code %}">Ver comprobante</a></td></tr>
+      {% empty %}
+        <tr><td colspan="5" class="text-center py-5">Todavía no tienes solicitudes.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load static %}
+{% load game_media %}
+{% block title %}Explorar videojuegos{% endblock %}
+{% block content %}
+<section class="hero-wrap">
+  <div class="container hero-panel">
+    <div class="hero-copy">
+      <span class="eyebrow"><span class="pulse-dot"></span> TU PRÓXIMA AVENTURA EMPIEZA AQUÍ</span>
+      <h1>Encuentra tu<br><span>próximo mundo.</span></h1>
+      <p>Descubre juegos originales, encuentra tu género y arma tu colección.</p>
+      <a class="btn btn-lime btn-lg" href="#catalogo">Explorar catálogo <span aria-hidden="true">↓</span></a>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <div class="orbit orbit-one"></div>
+      <div class="orbit orbit-two"></div>
+      <div class="hero-planet"><span></span></div>
+      <div class="hero-satellite">✦</div>
+      <div class="hero-art-label">LUDIX / 001</div>
+    </div>
+    <div class="hero-index">01 — 04</div>
+  </div>
+</section>
+
+<section class="container section-space" id="catalogo">
+  <div class="section-heading">
+    <div>
+      <span class="eyebrow">SELECCIÓN LUDIX</span>
+      <h2>Juega a tu manera<span class="brand-dot">.</span></h2>
+    </div>
+    <span class="result-count">{{ page_obj.paginator.count }} títulos disponibles</span>
+  </div>
+
+  <form method="get" class="filter-panel row g-3 align-items-end">
+    <div class="col-12 col-md-5">
+      <label class="form-label" for="search">Buscar en el catálogo</label>
+      <div class="search-wrap"><span aria-hidden="true">⌕</span><input id="search" class="form-control" type="search" name="q" value="{{ query }}" placeholder="Título, plataforma, código..."></div>
+    </div>
+    <div class="col-6 col-md-3">
+      <label class="form-label" for="genre">Género</label>
+      <select class="form-select" name="genre" id="genre">
+        <option value="">Todos los géneros</option>
+        {% for genre in genres %}
+          <option value="{{ genre.slug }}" {% if selected_genre == genre.slug %}selected{% endif %}>{{ genre.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-6 col-md-2">
+      <label class="form-label" for="order">Ordenar</label>
+      <select class="form-select" name="order" id="order">
+        <option value="title" {% if selected_order == "title" %}selected{% endif %}>Nombre</option>
+        <option value="price_asc" {% if selected_order == "price_asc" %}selected{% endif %}>Precio: menor</option>
+        <option value="price_desc" {% if selected_order == "price_desc" %}selected{% endif %}>Precio: mayor</option>
+        <option value="newest" {% if selected_order == "newest" %}selected{% endif %}>Novedades</option>
+      </select>
+    </div>
+    <div class="col-12 col-md-2 d-grid"><button class="btn btn-lime" type="submit">Aplicar filtros</button></div>
+  </form>
+
+  {% if games %}
+    <div class="row g-4 game-grid">
+      {% for game in games %}
+        <div class="col-12 col-sm-6 col-lg-4">
+          <article class="game-card h-100">
+            <a class="cover-link" href="{% url 'game_detail' game.slug %}" aria-label="Ver {{ game.title }}">
+              {% game_cover_url game as cover_url %}
+              <div class="game-cover game-cover--{{ game.slug }}{% if cover_url %} cover-has-image{% endif %}">
+                {% if cover_url %}
+                  <img class="cover-art" src="{{ cover_url }}" alt="Portada de {{ game.title }}" loading="lazy" decoding="async">
+                  {% if game.availability == "preorder" %}<span class="cover-badge">PREVENTA</span>{% endif %}
+                {% else %}
+                  <span class="cover-orbit"></span><span class="cover-code">{{ game.genre.name|upper }} / {{ forloop.counter|stringformat:"02d" }}</span>
+                  <span class="cover-title">{{ game.title }}</span><span class="cover-platform">{{ game.platform }}</span>
+                  {% if game.availability == "preorder" %}<span class="cover-badge">PREVENTA</span>{% endif %}
+                {% endif %}
+              </div>
+            </a>
+            <div class="game-card-body">
+              <div class="d-flex justify-content-between gap-3 align-items-start">
+                <div><span class="game-category">{{ game.genre.name }} · {{ game.platform }}</span><h3><a href="{% url 'game_detail' game.slug %}">{{ game.title }}</a></h3></div>
+                <span class="availability-dot {% if game.is_purchasable %}is-available{% endif %}" title="{% if game.is_purchasable %}Disponible{% else %}No disponible{% endif %}"></span>
+              </div>
+              <p class="game-description">{{ game.description|truncatechars:92 }}</p>
+              <div class="card-bottom"><span class="price">CLP ${{ game.price|floatformat:"0" }}</span><a class="arrow-link" href="{% url 'game_detail' game.slug %}" aria-label="Ver {{ game.title }}">↗</a></div>
+            </div>
+          </article>
+        </div>
+      {% endfor %}
+    </div>
+    {% if page_obj.paginator.num_pages > 1 %}
+      <nav class="pagination-wrap" aria-label="Paginación">
+        {% if page_obj.has_previous %}<a class="page-link-custom" href="?q={{ query|urlencode }}&genre={{ selected_genre|urlencode }}&order={{ selected_order }}&page={{ page_obj.previous_page_number }}">← Anterior</a>{% endif %}
+        <span class="page-number">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}<a class="page-link-custom" href="?q={{ query|urlencode }}&genre={{ selected_genre|urlencode }}&order={{ selected_order }}&page={{ page_obj.next_page_number }}">Siguiente →</a>{% endif %}
+      </nav>
+    {% endif %}
+  {% else %}
+    <div class="empty-state"><span class="empty-icon">⌕</span><h3>No encontramos ese juego</h3><p>Prueba con otro término o quita algún filtro.</p><a class="btn btn-outline-light" href="{% url 'catalog' %}">Ver todo el catálogo</a></div>
+  {% endif %}
+</section>
+{% endblock %}
