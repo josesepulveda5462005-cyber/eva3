@@ -118,11 +118,15 @@ def cart(request):
                 "available": game.is_purchasable and game.stock >= quantity,
             }
         )
+    subtotal_neto = (total / Decimal("1.19")).quantize(Decimal("1")) if total else Decimal("0")
+    iva_total = total - subtotal_neto
     return render(
         request,
         "store/cart.html",
         {
             "lines": lines,
+            "subtotal_neto": subtotal_neto,
+            "iva_total": iva_total,
             "total": total,
             "can_checkout": bool(lines) and all(line["available"] for line in lines),
         },
@@ -256,7 +260,17 @@ def order_detail(request, code):
         code=code,
         user=request.user,
     )
-    return render(request, "store/order_detail.html", {"order": order})
+    subtotal_neto = (order.total / Decimal("1.19")).quantize(Decimal("1")) if order.total else Decimal("0")
+    iva_total = order.total - subtotal_neto
+    return render(
+        request,
+        "store/order_detail.html",
+        {
+            "order": order,
+            "subtotal_neto": subtotal_neto,
+            "iva_total": iva_total,
+        },
+    )
 
 
 @login_required

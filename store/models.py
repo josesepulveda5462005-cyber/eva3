@@ -47,7 +47,11 @@ class Game(models.Model):
         decimal_places=0,
         validators=[MinValueValidator(0)],
     )
-    stock = models.PositiveIntegerField("unidades disponibles", default=0)
+    stock = models.PositiveIntegerField(
+        "unidades disponibles",
+        default=0,
+        validators=[MinValueValidator(0)],
+    )
     availability = models.CharField(
         "estado",
         max_length=12,

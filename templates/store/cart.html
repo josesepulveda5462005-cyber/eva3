@@ -37,8 +37,8 @@
       <div class="col-12 col-lg-4">
         <aside class="summary-card">
           <span class="eyebrow">RESUMEN</span>
-          <div class="summary-line"><span>Subtotal</span><span>CLP ${{ total|floatformat:"0" }}</span></div>
-          <div class="summary-line"><span>Impuestos</span><span>Incluidos</span></div>
+          <div class="summary-line"><span>Subtotal neto</span><span>CLP ${{ subtotal_neto|floatformat:"0" }}</span></div>
+          <div class="summary-line"><span>IVA (19%)</span><span>CLP ${{ iva_total|floatformat:"0" }}</span></div>
           <hr>
           <div class="summary-total"><span>Total</span><span>CLP ${{ total|floatformat:"0" }}</span></div>
           {% if user.is_authenticated %}

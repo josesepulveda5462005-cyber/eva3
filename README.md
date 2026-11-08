@@ -1,15 +1,17 @@
 # Ludix | Tienda digital de videojuegos
 
-## Ficha de la propuesta
+## Ficha de Registro y Aprobación de la Propuesta
 
-- **Organización/plataforma:** Ludix
-- **Modelo de negocio:** Catálogo y venta simulada de videojuegos digitales.
-- **Integrantes:** [Estudiante 1 - RUT] | [Estudiante 2 - RUT]
-- **Entidad de contexto (ORM):** Género de videojuego (`Genre`)
-- **Entidad principal gestionable (ORM):** Videojuego (`Game`)
-- **Propósito de `request.session`:** Carrito temporal con cantidades, validación de stock y cálculo del total antes de emitir una solicitud de compra simulada.
+| Campo | Detalle |
+|---|---|
+| **Nombre de la Organización o Plataforma:** | Ludix |
+| **Modelo de Negocio / Giro:** | Catálogo y venta simulada de videojuegos digitales |
+| **Integrantes del Equipo:** | [Estudiante 1 - RUT] \| [Estudiante 2 - RUT] |
+| **Entidad de Contexto / Agrupación (ORM):** | Género de videojuego (`Genre`) |
+| **Entidad Principal Gestionable (ORM):** | Videojuego (`Game`) |
+| **Propósito de la Sesión (request.session):** | Carrito temporal con cantidades, validación de stock y desglose económico (subtotal neto, IVA 19% y total) antes de emitir una solicitud de compra simulada |
 
-> Completar los integrantes y validar la propuesta con el/la docente antes de entregar.
+> **Nota:** Completar los nombres y RUTs de los integrantes del equipo antes de la entrega final.
 
 ## Funcionalidades
 

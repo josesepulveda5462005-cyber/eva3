@@ -35,16 +35,27 @@ class GameForm(forms.ModelForm):
         }
 
     def clean_slug(self):
-        slug = slugify(self.cleaned_data["slug"])
+        slug = slugify(self.cleaned_data.get("slug", ""))
         if not slug:
             raise ValidationError("Ingresa un código con letras o números.")
+        qs = Game.objects.filter(slug=slug)
+        if self.instance and self.instance.pk:
+            qs = qs.exclude(pk=self.instance.pk)
+        if qs.exists():
+            raise ValidationError("Ya existe un videojuego con este código.")
         return slug
 
     def clean_price(self):
-        price = self.cleaned_data["price"]
-        if price < 0:
+        price = self.cleaned_data.get("price")
+        if price is not None and price < 0:
             raise ValidationError("El precio no puede ser negativo.")
         return price
+
+    def clean_stock(self):
+        stock = self.cleaned_data.get("stock")
+        if stock is not None and stock < 0:
+            raise ValidationError("Las unidades disponibles no pueden ser negativas.")
+        return stock
 
 
 class RegistrationForm(UserCreationForm):

@@ -4,7 +4,7 @@ from .models import Game, Genre, OrderItem, OrderRequest, Profile
 
 admin.site.site_header = "Ludix - Panel de Control"
 admin.site.site_title = "Ludix Admin"
-admin.site.index_title = "Gestión Operativa de Videojuegos y Solicitudes"
+admin.site.index_title = "Gestión Operativa de Recursos y Servicios"
 
 
 @admin.register(Genre)

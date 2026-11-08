@@ -176,6 +176,64 @@ class StoreWorkflowTests(TestCase):
         self.assertEqual(profile.rut, "12.345.678-9")
         self.assertEqual(profile.role, Profile.Role.CUSTOMER)
 
+    def test_game_form_validations_clean_slug_and_clean_quantitatives(self):
+        from .forms import GameForm
+        # Unicidad en clean_slug
+        form_duplicate = GameForm(
+            data={
+                "genre": self.genre.pk,
+                "slug": "nebula-run",
+                "title": "Otro Nebula",
+                "description": "Texto",
+                "platform": "PC",
+                "price": 1000,
+                "stock": 5,
+                "availability": Game.Availability.AVAILABLE,
+            }
+        )
+        self.assertFalse(form_duplicate.is_valid())
+        self.assertIn("slug", form_duplicate.errors)
+
+        # Validación cuantitativa no negativa en precio y stock
+        form_negative = GameForm(
+            data={
+                "genre": self.genre.pk,
+                "slug": "juego-nuevo-valido",
+                "title": "Juego Nuevo",
+                "description": "Texto",
+                "platform": "PC",
+                "price": -100,
+                "stock": -5,
+                "availability": Game.Availability.AVAILABLE,
+            }
+        )
+        self.assertFalse(form_negative.is_valid())
+        self.assertIn("price", form_negative.errors)
+        self.assertIn("stock", form_negative.errors)
+
+    def test_cart_and_order_economic_breakdown(self):
+        self.client.force_login(self.customer)
+        session = self.client.session
+        session["cart"] = {str(self.game.pk): 2}
+        session.save()
+
+        response = self.client.get(reverse("cart"))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("subtotal_neto", response.context)
+        self.assertIn("iva_total", response.context)
+        self.assertEqual(
+            response.context["subtotal_neto"] + response.context["iva_total"],
+            response.context["total"],
+        )
+        self.assertContains(response, "Subtotal neto")
+        self.assertContains(response, "IVA (19%)")
+
+    def test_admin_custom_titles(self):
+        from django.contrib import admin
+        self.assertIn("Ludix", admin.site.site_header)
+        self.assertIn("Ludix", admin.site.site_title)
+        self.assertEqual(admin.site.index_title, "Gestión Operativa de Recursos y Servicios")
+
     def test_seed_command_loads_real_games_and_retires_legacy_samples(self):
         call_command("poblar_datos", stdout=StringIO())
 
