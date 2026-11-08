@@ -6,12 +6,10 @@
 |---|---|
 | **Nombre de la Organización o Plataforma:** | Ludix |
 | **Modelo de Negocio / Giro:** | Catálogo y venta simulada de videojuegos digitales |
-| **Integrantes del Equipo:** | [Estudiante 1 - RUT] \| [Estudiante 2 - RUT] |
+| **Integrantes del Equipo:** | José Sepúlveda - RUT: 21.927.528-5 |
 | **Entidad de Contexto / Agrupación (ORM):** | Género de videojuego (`Genre`) |
 | **Entidad Principal Gestionable (ORM):** | Videojuego (`Game`) |
 | **Propósito de la Sesión (request.session):** | Carrito temporal con cantidades, validación de stock y desglose económico (subtotal neto, IVA 19% y total) antes de emitir una solicitud de compra simulada |
-
-> **Nota:** Completar los nombres y RUTs de los integrantes del equipo antes de la entrega final.
 
 ## Funcionalidades
 
