@@ -1,7 +1,5 @@
 # Ludix | Tienda digital de videojuegos
 
-[Descargar informe del proyecto en Word](./Informe_Ludix.docx)
-
 ## Ficha de la propuesta
 
 - **Organización/plataforma:** Ludix
