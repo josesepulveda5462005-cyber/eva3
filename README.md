@@ -6,7 +6,9 @@
 |---|---|
 | **Nombre de la Organización o Plataforma:** | Ludix |
 | **Modelo de Negocio / Giro:** | Catálogo y venta simulada de videojuegos digitales |
-| **Integrantes del Equipo:** | José Sepúlveda - RUT: 21.927.528-5 (Desarrollo Individual) |
+| **Integrantes del Equipo:** | José Sepúlveda - RUT: 21.927.528-5 (Grupo: EVS3 Equipo 2 / Desarrollo Individual) |
+| **Carrera / Sede:** | Ingeniería en Ciberseguridad · INACAP Sede Chillán |
+| **Docente de Asignatura:** | Luis Rodrigo Arriagada Cerda |
 | **Entidad de Contexto / Agrupación (ORM):** | Género de videojuego (`Genre`) |
 | **Entidad Principal Gestionable (ORM):** | Videojuego (`Game`) |
 | **Propósito de la Sesión (request.session):** | Carrito temporal con cantidades, validación de stock y desglose económico (subtotal neto, IVA 19% y total) antes de emitir una solicitud de compra simulada |
